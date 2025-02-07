@@ -1,1 +1,5 @@
-
+title: "Мой блог"
+description: "Простой блог на GitHub Pages с Jekyll"
+baseurl: "" # Если это основной сайт, оставь пустым
+url: "https://ТВОЙ-НИК.github.io"
+theme: minima # Встроенная тема Jekyll
