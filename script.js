@@ -1,5 +1,5 @@
 document.getElementById("loadPosts").addEventListener("click", async () => {
-    const postFiles = ["posts/post1.txt", "posts/post2.txt"]; // Список файлов
+    const postFiles = ["_posts/post1.txt", "posts/post2.txt"]; // Список файлов
     const container = document.getElementById("blog");
 
     for (const file of postFiles) {
