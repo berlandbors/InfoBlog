@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const postFiles = ["posts/1.txt", "posts/post2.txt"]; // Список файлов
+    const postFiles = ["https://berlandbor.github.io/BlogBerlandbor-/posts/1.txt", "posts/post2.txt"]; // Список файлов
     const container = document.getElementById("blog");
 
     for (const file of postFiles) {
