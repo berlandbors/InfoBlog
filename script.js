@@ -1,17 +1,20 @@
-document.getElementById("loadPosts").addEventListener("click", async () => {
-    const postFiles = ["posts/1.md", ""]; // Список файлов
+document.addEventListener("DOMContentLoaded", async () => {
+    const postFiles = ["posts/1.txt", "posts/post2.txt"]; // Список файлов
     const container = document.getElementById("blog");
 
     for (const file of postFiles) {
         try {
+            console.log("Загружаем:", file); // Лог в консоли для отладки
             const response = await fetch(file);
-            if (!response.ok) throw new Error("Ошибка загрузки: " + file);
+            if (!response.ok) throw new Error(`Ошибка загрузки: ${file}`);
             const text = await response.text();
 
-            const lines = text.split("\n"); // Разбиваем по строкам
-            const title = lines[0];         // Первая строка — заголовок
-            const date = lines[1];          // Вторая строка — дата
-            const content = lines.slice(2).join("\n"); // Остальной текст
+            const lines = text.split("\n");
+            if (lines.length < 2) throw new Error(`Файл ${file} имеет неправильный формат`);
+
+            const title = lines[0].trim();
+            const date = lines[1].trim();
+            const content = lines.slice(2).join("\n");
 
             const article = document.createElement("div");
             article.classList.add("post");
@@ -23,7 +26,7 @@ document.getElementById("loadPosts").addEventListener("click", async () => {
             `;
             container.appendChild(article);
         } catch (error) {
-            console.error("Ошибка загрузки статьи:", error);
+            console.error(error);
         }
     }
 });
