@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const postFiles = [
-        "posts/post1.txt",
+        "posts/1.txt",
         "posts/",
         "posts/",
         "posts/"
