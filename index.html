@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Блог на GitHub Pages</title>
+    <title>Блог Berlandbor</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Мой блог</h1>
+
+    <!-- Поле поиска -->
+    <input type="text" id="searchInput" placeholder="Поиск по названиям статей..." oninput="searchPosts()">
+
     <div id="blog"></div>
+
+    <!-- Кнопки для переключения страниц -->
+    <div class="pagination">
+        <button id="prevPage">← Назад</button>
+        <span id="pageNumber">Страница 1</span>
+        <button id="nextPage">Вперёд →</button>
+    </div>
 
     <script src="script.js"></script>
 </body>
