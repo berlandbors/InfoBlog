@@ -8,6 +8,17 @@ h1 {
     text-align: center;
 }
 
+/* Поле поиска */
+#searchInput {
+    width: 90%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Стили для статей */
 .post {
     border-bottom: 1px solid #ddd;
     padding: 10px 0;
@@ -17,10 +28,29 @@ h1 {
     color: #333;
 }
 
-button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
+/* Стили для кнопок пагинации */
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 15px;
     font-size: 16px;
     cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 18px;
+    margin: 0 10px;
 }
