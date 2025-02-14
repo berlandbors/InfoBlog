@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const postFiles = [
         "posts/1.txt",
-        "posts/",
-        "posts/",
-        "posts/"
+        "posts/2.txt",
+        "posts/3.txt",
+        "posts/4.txt"
     ]; // Список статей
 
     const postsPerPage = 1; // Количество статей на странице
@@ -38,6 +38,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         displayPosts(); // Отображаем статьи после загрузки
     }
 
+    // Функция для автоформатирования Markdown-подобного текста в HTML
+    function formatText(text) {
+        return text
+            .replace(/^### (.*$)/gim, "<h3>$1</h3>") // Заголовки 3 уровня
+            .replace(/^## (.*$)/gim, "<h2>$1</h2>") // Заголовки 2 уровня
+            .replace(/^# (.*$)/gim, "<h1>$1</h1>") // Заголовки 1 уровня
+            .replace(/\*\*(.*?)\*\*/gim, "<b>$1</b>") // Жирный текст
+            .replace(/\*(.*?)\*/gim, "<i>$1</i>") // Курсив
+            .replace(/`([^`]+)`/gim, "<code>$1</code>") // Код (одна строка)
+            .replace(/- (.*)/gim, "<ul><li>$1</li></ul>") // Списки
+            .replace(/\n/g, "<br>"); // Перенос строк
+    }
+
     // Функция отображения статей (учитывает пагинацию и поиск)
     function displayPosts() {
         blogContainer.innerHTML = ""; // Очищаем старые статьи
@@ -48,6 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             post.content.toLowerCase().includes(searchQuery)
         ); // Оставляем только совпадающие статьи
 
+        const totalPages = Math.ceil(filteredPosts.length / postsPerPage); // Вычисляем кол-во страниц
         const startIndex = (currentPage - 1) * postsPerPage;
         const endIndex = startIndex + postsPerPage;
         const pagePosts = filteredPosts.slice(startIndex, endIndex); // Отображаем нужные статьи
@@ -58,16 +72,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             article.innerHTML = `
                 <h2>${post.title}</h2>
                 <p><small>${post.date}</small></p>
-                <p>${post.content}</p>
+                <p>${formatText(post.content)}</p>
                 <hr>
             `;
             blogContainer.appendChild(article);
         }
 
-        // Обновляем состояние кнопок (исправлено)
+        // Обновляем состояние кнопок
         pageNumber.textContent = `Страница ${currentPage}`;
         prevButton.disabled = currentPage === 1;
-        nextButton.disabled = endIndex >= filteredPosts.length;
+        nextButton.disabled = currentPage >= totalPages;
     }
 
     // Функция поиска
