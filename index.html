@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Блог Berlandbor</title>
+    <title>Блог с прокручиваемым оглавлением</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Мой блог</h1>
 
-    <!-- Поле поиска -->
-    <input type="text" id="searchInput" placeholder="Поиск по названиям статей..." oninput="searchPosts()">
+    <!-- Оглавление (прокручиваемый блок) -->
+    <div id="toc-container">
+        <h2>Содержание</h2>
+        <div id="toc"></div>
+    </div><hr>
 
+    <!-- Поле поиска -->
+    <!-- Красивое поле поиска -->
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Поиск по статьям..." oninput="searchPosts()">
+</div>
     <div id="blog"></div>
 
     <!-- Кнопки для переключения страниц -->
@@ -20,9 +28,6 @@
         <span id="pageNumber">Страница 1</span>
         <button id="nextPage">Вперёд →</button>
     </div>
-<hr><p>Можно поделиться этой статьей, скачав URL блога в адресной строке браузера.</p><hr>
-
-<p>© berlandbor.</p>
 
     <script src="script.js"></script>
 </body>
