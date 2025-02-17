@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let allPosts = []; // Хранит загруженные статьи
 
     const blogContainer = document.getElementById("blog");
+    const tocContainer = document.getElementById("toc"); // Контейнер оглавления
     const prevButton = document.getElementById("prevPage");
     const nextButton = document.getElementById("nextPage");
     const pageNumber = document.getElementById("pageNumber");
@@ -35,20 +36,36 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.error(error);
             }
         }
+        generateTOC(); // Обновляем оглавление
         displayPosts(); // Отображаем статьи после загрузки
     }
 
-    // Функция для автоформатирования Markdown-подобного текста в HTML
-    function formatText(text) {
-        return text
-            .replace(/^### (.*$)/gim, "<h3>$1</h3>") // Заголовки 3 уровня
-            .replace(/^## (.*$)/gim, "<h2>$1</h2>") // Заголовки 2 уровня
-            .replace(/^# (.*$)/gim, "<h1>$1</h1>") // Заголовки 1 уровня
-            .replace(/\*\*(.*?)\*\*/gim, "<b>$1</b>") // Жирный текст
-            .replace(/\*(.*?)\*/gim, "<i>$1</i>") // Курсив
-            .replace(/`([^`]+)`/gim, "<code>$1</code>") // Код (одна строка)
-            .replace(/- (.*)/gim, "<ul><li>$1</li></ul>") // Списки
-            .replace(/\n/g, "<br>"); // Перенос строк
+    // Функция создания динамического оглавления
+    function generateTOC() {
+        tocContainer.innerHTML = "<ul>";
+
+        allPosts.forEach((post, index) => {
+            const postId = `post-${index}`; // Уникальный ID для каждой статьи
+            tocContainer.innerHTML += `<li><a href="#" data-post="${index}">${post.title}</a></li>`;
+        });
+
+        tocContainer.innerHTML += "</ul>";
+
+        // Добавляем обработчик кликов на ссылки оглавления
+        document.querySelectorAll("#toc a").forEach(link => {
+            link.addEventListener("click", (event) => {
+                event.preventDefault();
+                const postIndex = event.target.getAttribute("data-post");
+                currentPage = parseInt(postIndex) + 1;
+                displayPosts();
+                scrollToTop();
+            });
+        });
+    }
+
+    // Функция прокрутки вверх при переключении страниц
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     // Функция отображения статей (учитывает пагинацию и поиск)
@@ -66,13 +83,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         const endIndex = startIndex + postsPerPage;
         const pagePosts = filteredPosts.slice(startIndex, endIndex); // Отображаем нужные статьи
 
-        for (const post of pagePosts) {
+        for (let i = 0; i < pagePosts.length; i++) {
+            const post = pagePosts[i];
             const article = document.createElement("div");
             article.classList.add("post");
+            article.id = `post-${i}`;
             article.innerHTML = `
                 <h2>${post.title}</h2>
                 <p><small>${post.date}</small></p>
-                <p>${formatText(post.content)}</p>
+                <p>${post.content.replace(/\n/g, "<br>")}</p>
                 <hr>
             `;
             blogContainer.appendChild(article);
@@ -82,6 +101,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         pageNumber.textContent = `Страница ${currentPage}`;
         prevButton.disabled = currentPage === 1;
         nextButton.disabled = currentPage >= totalPages;
+
+        // Прокрутка вверх при смене страницы
+        scrollToTop();
     }
 
     // Функция поиска
