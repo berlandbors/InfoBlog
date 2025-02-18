@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const postsPerPage = 1; // Количество статей на странице
     let currentPage = 1;
     let allPosts = []; // Хранит загруженные статьи
+    let filteredPosts = []; // Фильтрованные статьи для поиска
 
     const blogContainer = document.getElementById("blog");
     const tocContainer = document.getElementById("toc");
@@ -17,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pageNumber = document.getElementById("pageNumber");
     const searchInput = document.getElementById("searchInput");
 
-    // Функция транслитерации заголовков в латиницу
+    // Функция транслитерации заголовков в латиницу (ЧПУ URL)
     function transliterate(text) {
         const ruToEn = {
             "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "yo", "ж": "zh", "з": "z",
@@ -51,6 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.error(error);
             }
         }
+        filteredPosts = [...allPosts]; // Изначально показываем все статьи
         generateTOC();
         checkURLForArticle();
         displayPosts();
@@ -60,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function generateTOC() {
         tocContainer.innerHTML = "<ul>";
 
-        allPosts.forEach((post, index) => {
+        filteredPosts.forEach((post, index) => {
             const postSlug = transliterate(post.title);
             tocContainer.innerHTML += `<li><a href="?article=${index}&title=${postSlug}">${post.title}</a></li>`;
         });
@@ -77,10 +79,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     function displayPosts() {
         blogContainer.innerHTML = "";
 
-        const totalPages = Math.ceil(allPosts.length / postsPerPage);
+        const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
         const startIndex = (currentPage - 1) * postsPerPage;
         const endIndex = startIndex + postsPerPage;
-        const pagePosts = allPosts.slice(startIndex, endIndex);
+        const pagePosts = filteredPosts.slice(startIndex, endIndex);
 
         for (let i = 0; i < pagePosts.length; i++) {
             const post = pagePosts[i];
@@ -134,6 +136,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         scrollToTop();
     }
 
+    // Функция поиска статей
+    function searchPosts() {
+        const searchQuery = searchInput.value.toLowerCase();
+        if (searchQuery.length > 0) {
+            filteredPosts = allPosts.filter(post =>
+                post.title.toLowerCase().includes(searchQuery) ||
+                post.content.toLowerCase().includes(searchQuery)
+            );
+        } else {
+            filteredPosts = [...allPosts]; // Если поиск пустой, показываем все статьи
+        }
+        currentPage = 1;
+        generateTOC();
+        displayPosts();
+    }
+
     // Функция проверки URL
     function checkURLForArticle() {
         const params = new URLSearchParams(window.location.search);
@@ -156,12 +174,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     nextButton.addEventListener("click", () => {
-        const totalPages = Math.ceil(allPosts.length / postsPerPage);
+        const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
         if (currentPage < totalPages) {
             currentPage++;
             displayPosts();
         }
     });
+
+    searchInput.addEventListener("input", searchPosts);
 
     // Загружаем статьи при запуске
     loadAllPosts();
