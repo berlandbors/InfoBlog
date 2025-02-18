@@ -11,15 +11,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     let allPosts = []; // Хранит загруженные статьи
 
     const blogContainer = document.getElementById("blog");
-    const tocContainer = document.getElementById("toc"); // Контейнер оглавления
+    const tocContainer = document.getElementById("toc");
     const prevButton = document.getElementById("prevPage");
     const nextButton = document.getElementById("nextPage");
     const pageNumber = document.getElementById("pageNumber");
     const searchInput = document.getElementById("searchInput");
 
-    // Функция загрузки статей в массив
+    // Функция транслитерации заголовков в латиницу
+    function transliterate(text) {
+        const ruToEn = {
+            "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "yo", "ж": "zh", "з": "z",
+            "и": "i", "й": "y", "к": "k", "л": "l", "м": "m", "н": "n", "о": "o", "п": "p", "р": "r",
+            "с": "s", "т": "t", "у": "u", "ф": "f", "х": "h", "ц": "ts", "ч": "ch", "ш": "sh", "щ": "sch",
+            "ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "yu", "я": "ya"
+        };
+        return text.toLowerCase()
+            .replace(/[а-яё]/g, char => ruToEn[char] || char)
+            .replace(/[^a-z0-9-]/g, "-")
+            .replace(/-+/g, "-")
+            .trim("-");
+    }
+
+    // Функция загрузки статей
     async function loadAllPosts() {
-        allPosts = []; // Очистка перед загрузкой
+        allPosts = [];
         for (const file of postFiles) {
             try {
                 const response = await fetch(file);
@@ -36,69 +51,90 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.error(error);
             }
         }
-        generateTOC(); // Обновляем оглавление
-        checkURLForArticle(); // Проверяем URL и загружаем нужную статью
-        displayPosts(); // Отображаем статьи после загрузки
+        generateTOC();
+        checkURLForArticle();
+        displayPosts();
     }
 
-    // Функция создания динамического оглавления
+    // Функция создания оглавления
     function generateTOC() {
         tocContainer.innerHTML = "<ul>";
 
         allPosts.forEach((post, index) => {
-            const postId = `post-${index}`; // Уникальный ID для статьи
-            tocContainer.innerHTML += `<li><a href="?article=${index}">${post.title}</a></li>`;
+            const postSlug = transliterate(post.title);
+            tocContainer.innerHTML += `<li><a href="?article=${index}&title=${postSlug}">${post.title}</a></li>`;
         });
 
         tocContainer.innerHTML += "</ul>";
     }
 
-    // Функция прокрутки вверх при переключении страниц
+    // Функция прокрутки вверх
     function scrollToTop() {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    // Функция отображения статей (учитывает пагинацию и поиск)
+    // Функция отображения статей
     function displayPosts() {
-        blogContainer.innerHTML = ""; // Очищаем старые статьи
+        blogContainer.innerHTML = "";
 
-        const searchQuery = searchInput.value.toLowerCase(); // Запрос поиска
-        const filteredPosts = allPosts.filter(post =>
-            post.title.toLowerCase().includes(searchQuery) ||
-            post.content.toLowerCase().includes(searchQuery)
-        ); // Оставляем только совпадающие статьи
-
-        const totalPages = Math.ceil(filteredPosts.length / postsPerPage); // Вычисляем кол-во страниц
+        const totalPages = Math.ceil(allPosts.length / postsPerPage);
         const startIndex = (currentPage - 1) * postsPerPage;
         const endIndex = startIndex + postsPerPage;
-        const pagePosts = filteredPosts.slice(startIndex, endIndex); // Отображаем нужные статьи
+        const pagePosts = allPosts.slice(startIndex, endIndex);
 
         for (let i = 0; i < pagePosts.length; i++) {
             const post = pagePosts[i];
-            const articleId = `post-${i}`;
+            const postSlug = transliterate(post.title);
             const article = document.createElement("div");
             article.classList.add("post");
-            article.id = articleId;
             article.innerHTML = `
                 <h2>${post.title}</h2>
                 <p><small>${post.date}</small></p>
                 <p>${post.content.replace(/\n/g, "<br>")}</p>
-                <p><a href="?article=${i}" class="share-link">🔗 Ссылка на статью</a></p>
+                <p>
+                    <button class="copy-link" data-link="?article=${startIndex}&title=${postSlug}">🔗 Скопировать ссылку</button>
+                    <button class="share-link" data-link="?article=${startIndex}&title=${postSlug}">📤 Поделиться</button>
+                </p>
                 <hr>
             `;
             blogContainer.appendChild(article);
         }
 
-        // Обновляем состояние кнопок
+        // Обновляем состояние кнопок пагинации
         pageNumber.textContent = `Страница ${currentPage}`;
         prevButton.disabled = currentPage === 1;
         nextButton.disabled = currentPage >= totalPages;
 
-        // Прокрутка вверх при смене страницы
+        // Добавляем обработчики кнопок копирования и отправки
+        document.querySelectorAll(".copy-link").forEach(button => {
+            button.addEventListener("click", (event) => {
+                const url = window.location.origin + window.location.pathname + event.target.getAttribute("data-link");
+                navigator.clipboard.writeText(url).then(() => {
+                    alert("Ссылка скопирована!");
+                }).catch(err => {
+                    console.error("Ошибка при копировании ссылки", err);
+                });
+            });
+        });
+
+        document.querySelectorAll(".share-link").forEach(button => {
+            button.addEventListener("click", (event) => {
+                const url = window.location.origin + window.location.pathname + event.target.getAttribute("data-link");
+                if (navigator.share) {
+                    navigator.share({
+                        title: document.title,
+                        url: url
+                    }).catch(err => console.error("Ошибка при отправке", err));
+                } else {
+                    alert("Ваш браузер не поддерживает функцию 'Поделиться'. Просто скопируйте ссылку.");
+                }
+            });
+        });
+
         scrollToTop();
     }
 
-    // Функция проверки URL на наличие статьи
+    // Функция проверки URL
     function checkURLForArticle() {
         const params = new URLSearchParams(window.location.search);
         if (params.has("article")) {
@@ -106,17 +142,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!isNaN(articleIndex) && articleIndex >= 0 && articleIndex < allPosts.length) {
                 currentPage = articleIndex + 1;
                 displayPosts();
+                document.title = params.get("title").replace(/-/g, " ");
             }
         }
     }
 
-    // Функция поиска
-    function searchPosts() {
-        currentPage = 1; // Сбрасываем страницу
-        displayPosts(); // Перерисовываем статьи
-    }
-
-    // Обработчики кнопок
+    // Обработчики кнопок пагинации
     prevButton.addEventListener("click", () => {
         if (currentPage > 1) {
             currentPage--;
@@ -134,5 +165,4 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Загружаем статьи при запуске
     loadAllPosts();
-    window.searchPosts = searchPosts; // Делаем функцию доступной в `oninput`
 });
