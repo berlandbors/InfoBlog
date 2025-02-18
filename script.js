@@ -82,8 +82,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             const postSlug = transliterate(post.title);
             const articleURL = `${window.location.origin}${window.location.pathname}?article=${startIndex}&title=${postSlug}`;
 
-            // Обрезаем текст статьи до 200 символов
-            const shortContent = post.content.length > 200
+            // Обрезаем текст статьи до 700 символов
+            const shortContent = post.content.length > 777
                 ? post.content.substring(0, 200) + "..."
                 : post.content;
 
