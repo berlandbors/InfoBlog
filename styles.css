@@ -4,11 +4,11 @@ body {
     max-width: 800px;
 }
 
-/* Стили для прокручиваемого оглавления */
+/* Оглавление (меню содержания) */
 #toc-container {
     width: 100%;
-    max-width: 300px; /* Ширина оглавления */
-    max-height: 300px; /* Фиксированная высота */
+    max-width: 300px; /* Ограничиваем ширину */
+    max-height: 300px; /* Ограничиваем высоту */
     overflow-y: auto; /* Добавляем вертикальную прокрутку */
     border: 1px solid #ccc;
     padding: 10px;
@@ -22,10 +22,12 @@ body {
 #toc ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 #toc li {
-    margin: 5px 0;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
 }
 
 #toc a {
