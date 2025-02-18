@@ -3,14 +3,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         "posts/1.txt",
         "posts/2.txt",
         "posts/3.txt",
-        "posts/4.txt",
-        "posts/5.txt"
-    ]; // Список статей
+        "posts/4.txt"
+    ]; 
 
-    const postsPerPage = 1; // Количество статей на странице
+    const postsPerPage = 1;
     let currentPage = 1;
-    let allPosts = []; // Хранит загруженные статьи
-    let filteredPosts = []; // Фильтрованные статьи для поиска
+    let allPosts = [];
+    let filteredPosts = [];
 
     const blogContainer = document.getElementById("blog");
     const tocContainer = document.getElementById("toc");
@@ -19,7 +18,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pageNumber = document.getElementById("pageNumber");
     const searchInput = document.getElementById("searchInput");
 
-    // Функция транслитерации заголовков в латиницу (ЧПУ URL)
     function transliterate(text) {
         const ruToEn = {
             "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "yo", "ж": "zh", "з": "z",
@@ -34,7 +32,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             .trim("-");
     }
 
-    // Функция загрузки статей
     async function loadAllPosts() {
         allPosts = [];
         for (const file of postFiles) {
@@ -53,30 +50,25 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.error(error);
             }
         }
-        filteredPosts = [...allPosts]; // Изначально показываем все статьи
+        filteredPosts = [...allPosts]; // Используем копию для поиска
         generateTOC();
         checkURLForArticle();
         displayPosts();
     }
 
-    // Функция создания оглавления
     function generateTOC() {
         tocContainer.innerHTML = "<ul>";
-
         filteredPosts.forEach((post, index) => {
             const postSlug = transliterate(post.title);
             tocContainer.innerHTML += `<li><a href="?article=${index}&title=${postSlug}">${post.title}</a></li>`;
         });
-
         tocContainer.innerHTML += "</ul>";
     }
 
-    // Функция прокрутки вверх
     function scrollToTop() {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    // Функция отображения статей
     function displayPosts() {
         blogContainer.innerHTML = "";
 
@@ -88,6 +80,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         for (let i = 0; i < pagePosts.length; i++) {
             const post = pagePosts[i];
             const postSlug = transliterate(post.title);
+            const articleURL = `${window.location.origin}${window.location.pathname}?article=${startIndex}&title=${postSlug}`;
+
+            // Обрезаем текст статьи до 200 символов
+            const shortContent = post.content.length > 200
+                ? post.content.substring(0, 200) + "..."
+                : post.content;
+
             const article = document.createElement("div");
             article.classList.add("post");
             article.innerHTML = `
@@ -95,25 +94,23 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <p><small>${post.date}</small></p>
                 <p>${post.content.replace(/\n/g, "<br>")}</p>
                 <p>
-                    <button class="copy-link" data-link="?article=${startIndex}&title=${postSlug}">🔗 Скопировать ссылку</button>
-                    <button class="share-link" data-link="?article=${startIndex}&title=${postSlug}">📤 Поделиться</button>
+                    <button class="copy-link" data-link="${articleURL}">🔗 Скопировать ссылку</button>
+                    <button class="share-link" data-title="${post.title}" data-content="${shortContent}" data-url="${articleURL}">📤 Поделиться</button>
                 </p>
                 <hr>
             `;
             blogContainer.appendChild(article);
         }
 
-        // Обновляем состояние кнопок пагинации
         pageNumber.textContent = `Страница ${currentPage}`;
         prevButton.disabled = currentPage === 1;
         nextButton.disabled = currentPage >= totalPages;
 
-        // Добавляем обработчики кнопок копирования и отправки
         document.querySelectorAll(".copy-link").forEach(button => {
             button.addEventListener("click", (event) => {
-                const url = window.location.origin + window.location.pathname + event.target.getAttribute("data-link");
+                const url = event.target.getAttribute("data-link");
                 navigator.clipboard.writeText(url).then(() => {
-                    alert("Ссылка скопирована!");
+                    alert("Ссылка на статью скопирована!");
                 }).catch(err => {
                     console.error("Ошибка при копировании ссылки", err);
                 });
@@ -122,14 +119,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         document.querySelectorAll(".share-link").forEach(button => {
             button.addEventListener("click", (event) => {
-                const url = window.location.origin + window.location.pathname + event.target.getAttribute("data-link");
+                const title = event.target.getAttribute("data-title");
+                const content = event.target.getAttribute("data-content");
+                const pageUrl = event.target.getAttribute("data-url");
+                const shareText = `📝 ${title}\n\n${content}\n\n🔗 Читать полностью: ${pageUrl}`;
+
                 if (navigator.share) {
                     navigator.share({
-                        title: document.title,
-                        url: url
+                        title: title,
+                        text: shareText,
+                        url: pageUrl
                     }).catch(err => console.error("Ошибка при отправке", err));
                 } else {
-                    alert("Ваш браузер не поддерживает функцию 'Поделиться'. Просто скопируйте ссылку.");
+                    navigator.clipboard.writeText(shareText).then(() => {
+                        alert("Текст с ссылкой скопирован!");
+                    });
                 }
             });
         });
@@ -137,23 +141,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         scrollToTop();
     }
 
-    // Функция поиска статей
     function searchPosts() {
         const searchQuery = searchInput.value.toLowerCase();
-        if (searchQuery.length > 0) {
-            filteredPosts = allPosts.filter(post =>
-                post.title.toLowerCase().includes(searchQuery) ||
-                post.content.toLowerCase().includes(searchQuery)
-            );
-        } else {
-            filteredPosts = [...allPosts]; // Если поиск пустой, показываем все статьи
-        }
+        filteredPosts = allPosts.filter(post =>
+            post.title.toLowerCase().includes(searchQuery) ||
+            post.content.toLowerCase().includes(searchQuery)
+        );
         currentPage = 1;
         generateTOC();
         displayPosts();
     }
 
-    // Функция проверки URL
     function checkURLForArticle() {
         const params = new URLSearchParams(window.location.search);
         if (params.has("article")) {
@@ -166,24 +164,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // Обработчики кнопок пагинации
-    prevButton.addEventListener("click", () => {
-        if (currentPage > 1) {
-            currentPage--;
-            displayPosts();
-        }
-    });
-
-    nextButton.addEventListener("click", () => {
-        const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            displayPosts();
-        }
-    });
-
     searchInput.addEventListener("input", searchPosts);
+    prevButton.addEventListener("click", () => { if (currentPage > 1) { currentPage--; displayPosts(); } });
+    nextButton.addEventListener("click", () => { if (currentPage < Math.ceil(filteredPosts.length / postsPerPage)) { currentPage++; displayPosts(); } });
 
-    // Загружаем статьи при запуске
     loadAllPosts();
 });
