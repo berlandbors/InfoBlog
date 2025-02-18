@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         }
         generateTOC(); // Обновляем оглавление
+        checkURLForArticle(); // Проверяем URL и загружаем нужную статью
         displayPosts(); // Отображаем статьи после загрузки
     }
 
@@ -45,22 +46,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         tocContainer.innerHTML = "<ul>";
 
         allPosts.forEach((post, index) => {
-            const postId = `post-${index}`; // Уникальный ID для каждой статьи
-            tocContainer.innerHTML += `<li><a href="#" data-post="${index}">${post.title}</a></li>`;
+            const postId = `post-${index}`; // Уникальный ID для статьи
+            tocContainer.innerHTML += `<li><a href="?article=${index}">${post.title}</a></li>`;
         });
 
         tocContainer.innerHTML += "</ul>";
-
-        // Добавляем обработчик кликов на ссылки оглавления
-        document.querySelectorAll("#toc a").forEach(link => {
-            link.addEventListener("click", (event) => {
-                event.preventDefault();
-                const postIndex = event.target.getAttribute("data-post");
-                currentPage = parseInt(postIndex) + 1;
-                displayPosts();
-                scrollToTop();
-            });
-        });
     }
 
     // Функция прокрутки вверх при переключении страниц
@@ -85,13 +75,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         for (let i = 0; i < pagePosts.length; i++) {
             const post = pagePosts[i];
+            const articleId = `post-${i}`;
             const article = document.createElement("div");
             article.classList.add("post");
-            article.id = `post-${i}`;
+            article.id = articleId;
             article.innerHTML = `
                 <h2>${post.title}</h2>
                 <p><small>${post.date}</small></p>
                 <p>${post.content.replace(/\n/g, "<br>")}</p>
+                <p><a href="?article=${i}" class="share-link">🔗 Ссылка на статью</a></p>
                 <hr>
             `;
             blogContainer.appendChild(article);
@@ -104,6 +96,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Прокрутка вверх при смене страницы
         scrollToTop();
+    }
+
+    // Функция проверки URL на наличие статьи
+    function checkURLForArticle() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has("article")) {
+            const articleIndex = parseInt(params.get("article"));
+            if (!isNaN(articleIndex) && articleIndex >= 0 && articleIndex < allPosts.length) {
+                currentPage = articleIndex + 1;
+                displayPosts();
+            }
+        }
     }
 
     // Функция поиска
