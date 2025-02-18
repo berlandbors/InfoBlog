@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         "posts/1.txt",
         "posts/2.txt",
         "posts/3.txt",
-        "posts/4.txt"
+        "posts/4.txt",
+        "post/5.txt"
     ]; // Список статей
 
     const postsPerPage = 1; // Количество статей на странице
