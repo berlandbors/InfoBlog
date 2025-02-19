@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         "posts/7.txt,
         "posts/8.txt,
         "posts/9.txt,
-        "post/10.txt
+        "posts/10.txt
     ]; 
 
     const postsPerPage = 1;
