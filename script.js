@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // Обрезаем текст статьи до 700 символов
             const shortContent = post.content.length > 777
-                ? post.content.substring(0, 200) + "..."
+                ? post.content.substring(0, 777) + "..."
                 : post.content;
 
             const article = document.createElement("div");
