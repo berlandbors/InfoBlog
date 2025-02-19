@@ -28,29 +28,35 @@ document.addEventListener("DOMContentLoaded", async () => {
             .trim("-");
     }
 
-    // Функция для конвертации URL в кликабельные ссылки и вставки видео/изображений
+    // Функция для конвертации URL в кликабельные ссылки, вставки видео и изображений
     function linkify(text) {
         const urlRegex = /((https?:\/\/|www\.)[^\s]+)/g;
-        return text.replace(urlRegex, (url) => {
-            const hyperlink = url.startsWith('http') ? url : `https://${url}`;
 
-            // Если это изображение
-            if (/\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(hyperlink)) {
-                return `<img src="${hyperlink}" alt="Image" style="max-width:100%; height:auto;">`;
-            }
+        // Разбиваем текст на строки для обработки переносов
+        const lines = text.split('\n');
 
-            // Если это YouTube-видео
-            const youtubeMatch = hyperlink.match(/(?:https?:\/\/)?(?:www\.)?youtu(?:\.be|be\.com)\/(?:watch\?v=)?([^\s&]+)/);
-            if (youtubeMatch && youtubeMatch[1]) {
-                const videoId = youtubeMatch[1];
-                return `<iframe width="350" height="200" src="https://www.youtube.com/embed/${videoId}" 
-                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen></iframe>`;
-            }
+        return lines.map(line => {
+            return line.replace(urlRegex, (url) => {
+                const hyperlink = url.startsWith('http') ? url : `https://${url}`;
 
-            // Обычная ссылка
-            return `<a href="${hyperlink}" target="_blank" rel="noopener noreferrer">${url}</a>`;
-        });
+                // Если это изображение
+                if (/\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(hyperlink)) {
+                    return `<img src="${hyperlink}" alt="Image" style="max-width:100%; height:auto;">`;
+                }
+
+                // Если это YouTube-видео
+                const youtubeMatch = hyperlink.match(/(?:https?:\/\/)?(?:www\.)?youtu(?:\.be|be\.com)\/(?:watch\?v=)?([^\s&]+)/);
+                if (youtubeMatch && youtubeMatch[1]) {
+                    const videoId = youtubeMatch[1];
+                    return `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" 
+                            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>`;
+                }
+
+                // Обычная ссылка
+                return `<a href="${hyperlink}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+            });
+        }).map(line => `<p>${line}</p>`).join('');
     }
 
     // Загрузка списка файлов из list.txt
@@ -118,7 +124,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const articleURL = `${window.location.origin}${window.location.pathname}?article=${startIndex}&title=${postSlug}`;
 
             // Обрабатываем контент через linkify для добавления ссылок, изображений и видео
-            const processedContent = linkify(post.content.replace(/\n/g, "<br>"));
+            const processedContent = linkify(post.content);
 
             const shortContent = post.content.length > 777
                 ? post.content.substring(0, 777) + "..."
@@ -129,7 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             article.innerHTML = `
                 <h2>${post.title}</h2>
                 <p><small>${post.date}</small></p>
-                <p>${processedContent}</p>
+                <div>${processedContent}</div>
                 <p>
                     <button class="copy-link" data-link="${articleURL}">🔗 Скопировать ссылку</button>
                     <button class="share-link" data-title="${post.title}" data-content="${shortContent}" data-url="${articleURL}">📤 Поделиться</button>
