@@ -28,6 +28,31 @@ document.addEventListener("DOMContentLoaded", async () => {
             .trim("-");
     }
 
+    // Функция для конвертации URL в кликабельные ссылки и вставки видео/изображений
+    function linkify(text) {
+        const urlRegex = /((https?:\/\/|www\.)[^\s]+)/g;
+        return text.replace(urlRegex, (url) => {
+            const hyperlink = url.startsWith('http') ? url : `https://${url}`;
+
+            // Если это изображение
+            if (/\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(hyperlink)) {
+                return `<img src="${hyperlink}" alt="Image" style="max-width:100%; height:auto;">`;
+            }
+
+            // Если это YouTube-видео
+            const youtubeMatch = hyperlink.match(/(?:https?:\/\/)?(?:www\.)?youtu(?:\.be|be\.com)\/(?:watch\?v=)?([^\s&]+)/);
+            if (youtubeMatch && youtubeMatch[1]) {
+                const videoId = youtubeMatch[1];
+                return `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" 
+                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>`;
+            }
+
+            // Обычная ссылка
+            return `<a href="${hyperlink}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+        });
+    }
+
     // Загрузка списка файлов из list.txt
     async function loadPostList() {
         try {
@@ -62,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.error(error);
             }
         }
-        filteredPosts = [...allPosts]; 
+        filteredPosts = [...allPosts];
         generateTOC();
         checkURLForArticle();
         displayPosts();
@@ -92,6 +117,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             const postSlug = transliterate(post.title);
             const articleURL = `${window.location.origin}${window.location.pathname}?article=${startIndex}&title=${postSlug}`;
 
+            // Обрабатываем контент через linkify для добавления ссылок, изображений и видео
+            const processedContent = linkify(post.content.replace(/\n/g, "<br>"));
+
             const shortContent = post.content.length > 777
                 ? post.content.substring(0, 777) + "..."
                 : post.content;
@@ -101,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             article.innerHTML = `
                 <h2>${post.title}</h2>
                 <p><small>${post.date}</small></p>
-                <p>${post.content.replace(/\n/g, "<br>")}</p>
+                <p>${processedContent}</p>
                 <p>
                     <button class="copy-link" data-link="${articleURL}">🔗 Скопировать ссылку</button>
                     <button class="share-link" data-title="${post.title}" data-content="${shortContent}" data-url="${articleURL}">📤 Поделиться</button>
@@ -116,7 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         nextButton.disabled = currentPage >= totalPages;
 
         setupCopyAndShare();
-        scrollToTop(); // Скроллим вверх после смены страницы
+        scrollToTop();
     }
 
     // Функция для плавного скролла вверх
