@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const youtubeMatch = hyperlink.match(/(?:https?:\/\/)?(?:www\.)?youtu(?:\.be|be\.com)\/(?:watch\?v=)?([^\s&]+)/);
             if (youtubeMatch && youtubeMatch[1]) {
                 const videoId = youtubeMatch[1];
-                return `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" 
+                return `<iframe width="350" height="200" src="https://www.youtube.com/embed/${videoId}" 
                         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                         allowfullscreen></iframe>`;
             }
