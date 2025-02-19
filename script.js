@@ -5,11 +5,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         "posts/3.txt",
         "posts/4.txt",
         "posts/5.txt",
-        "posts/6.txt,
-        "posts/7.txt,
-        "posts/8.txt,
-        "posts/9.txt,
-        "posts/10.txt
+        "posts/6.txt",
+        "posts/7.txt",
+        "posts/8.txt",
+        "posts/9.txt",
+        "posts/10.txt"
     ]; 
 
     const postsPerPage = 1;
