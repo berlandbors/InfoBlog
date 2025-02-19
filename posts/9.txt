@@ -76,8 +76,11 @@ YouTube-видео — просто вставь ссылку, и видео о�
 Заголовок статьи
 2024-02-19
 Контент статьи с текстом, ссылками и изображениями.
+
 https://example.com
-https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+https://www.youtube.com/
+
 https://example.com/image.jpg
 
 
@@ -91,15 +94,20 @@ https://example.com/image.jpg
 ---
 
 🌐 Демо-версия:
+
 https://berlandbor.github.io/BlogBerlandbor-/
-👉 Посмотреть демо: https://berlandbor.github.io/BlogBerlandbor-/
+
+👉 Посмотреть демо:
+
+https://berlandbor.github.io/BlogBerlandbor-/
 
 📂 GitHub-репозиторий:
+
 https://github.com/berlandbor/BlogBerlandbor-
 
 
 
----
+
 
 ⚡ Идеально подходит для:
 
