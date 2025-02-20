@@ -1,11 +1,6 @@
-// Функция для конвертации URL в кликабельные ссылки, вставки видео и изображений
-    // linkify.js
-
-
 function linkify(text) {
     const urlRegex = /((https?:\/\/|www\.)[^\s]+)/g;
 
-    // Применяем преобразования поэтапно
     return text
         // Ссылки, изображения, YouTube, аудио и видео
         .replace(urlRegex, (url) => {
@@ -43,10 +38,20 @@ function linkify(text) {
         .replace(/^### (.+)$/gm, '<h3>$1</h3>')
         .replace(/^## (.+)$/gm, '<h2>$1</h2>')
         .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+        // Горизонтальная линия
+        .replace(/^---$/gm, '<hr>')
+        // Цитаты
+        .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+        // Нумерованные списки
+        .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+        .replace(/(<li>.*<\/li>)/gms, '<ol>$1</ol>')
         // Жирный текст
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         // Курсив
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        // Кодовые блоки и строки
+        .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+        .replace(/`(.+?)`/g, '<code>$1</code>')
         // Списки
         .replace(/^- (.+)$/gm, '<li>$1</li>')
         .replace(/(<li>.*<\/li>)/gms, '<ul>$1</ul>')
