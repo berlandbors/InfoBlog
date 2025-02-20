@@ -104,3 +104,111 @@ body {
     color: #aaa;
     pointer-events: none; /* Не кликабельна */
 }
+
+
+
+    /* Заголовки */
+    h1, h2, h3 {
+        color: #222;
+        margin-top: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+        border-bottom: 3px solid #007BFF;
+        padding-bottom: 5px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        border-left: 4px solid #007BFF;
+        padding-left: 8px;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+        color: #555;
+    }
+
+    /* Текстовые элементы */
+    p {
+        margin-bottom: 16px;
+    }
+
+    a {
+        color: #007BFF;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    /* Списки */
+    ul, ol {
+        padding-left: 20px;
+        margin-bottom: 16px;
+    }
+
+    /* Цитаты */
+    blockquote {
+        border-left: 4px solid #ccc;
+        padding-left: 15px;
+        color: #666;
+        font-style: italic;
+        background: #f4f4f4;
+        margin: 16px 0;
+    }
+
+    /* Кодовые блоки */
+    pre, code {
+        background: #f4f4f4;
+        padding: 10px;
+        border-radius: 4px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+    }
+
+    pre {
+        margin-bottom: 16px;
+    }
+
+    /* Медиа-контент */
+    img, video, iframe {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 16px auto;
+    }
+
+    audio {
+        width: 100%;
+        margin: 16px 0;
+    }
+
+    /* Горизонтальная линия */
+    hr {
+        border: none;
+        border-top: 2px solid #eee;
+        margin: 24px 0;
+    }
+
+    /* Кнопки */
+    button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Плавный скролл */
+    html {
+        scroll-behavior: smooth;
+    }
