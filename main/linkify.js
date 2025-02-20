@@ -1,3 +1,7 @@
+// Функция для конвертации URL в кликабельные ссылки, вставки видео и изображений
+    // linkify.js
+
+
 function linkify(text) {
     const urlRegex = /((https?:\/\/|www\.)[^\s]+)/g;
 
