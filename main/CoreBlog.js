@@ -28,8 +28,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             .trim("-");
     }
 
-    // Функция для конвертации URL в кликабельные ссылки и вставки видео/изображений
-    
+    // Функция для конвертации URL в кликабельные ссылки, вставки видео и изображений
+    // linkify.js
+
+
 
     // Загрузка списка файлов из list.txt
     async function loadPostList() {
@@ -96,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const articleURL = `${window.location.origin}${window.location.pathname}?article=${startIndex}&title=${postSlug}`;
 
             // Обрабатываем контент через linkify для добавления ссылок, изображений и видео
-            const processedContent = linkify(post.content.replace(/\n/g, "<br>"));
+            const processedContent = linkify(post.content);
 
             const shortContent = post.content.length > 777
                 ? post.content.substring(0, 777) + "..."
@@ -107,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             article.innerHTML = `
                 <h2>${post.title}</h2>
                 <p><small>${post.date}</small></p>
-                <p>${processedContent}</p>
+                <div>${processedContent}</div>
                 <p>
                     <button class="copy-link" data-link="${articleURL}">🔗 Скопировать ссылку</button>
                     <button class="share-link" data-title="${post.title}" data-content="${shortContent}" data-url="${articleURL}">📤 Поделиться</button>
