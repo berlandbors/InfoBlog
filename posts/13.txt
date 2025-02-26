@@ -4,7 +4,7 @@
 
 V8 — это движок JavaScript с открытым исходным кодом, разработанный Google для браузера Chrome. Он был впервые представлен в 2008 году вместе с первым релизом Chrome и с тех пор стал стандартом для многих серверных и клиентских приложений, включая Node.js.
 
-https://upload.wikimedia.org/wikipedia/commons/3/3f/V8_JavaScript_engine_logo_2.svg
+https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/V8_JavaScript_engine_logo_2.svg/512px-V8_JavaScript_engine_logo_2.svg.png
 
 **Разработка и ключевые моменты**
 
