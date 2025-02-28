@@ -20,15 +20,24 @@ JSON (JavaScript Object Notation) — это легковесный формат
 Пример JSON:
 
 {
+   
     "name": "Андрей",
+
     "age": 39,
+
     "married": true,
+
     "children": ["Даник"],
+
     "job": {
         "position": "повар",
+
         "experience": 10
+
     }
+
 }
+
 ```
 *В этом примере:*
 
@@ -50,18 +59,28 @@ JSON (JavaScript Object Notation) — это легковесный формат
 ```
 import json
 
-# Преобразование Python-словаря в JSON
+*Преобразование Python-словаря в JSON*
+
 data = {
+
     "name": "Андрей",
+
     "age": 39,
+
     "married": True
+
 }
+
 json_string = json.dumps(data, indent=4)
+
 print(json_string)
 
-# Преобразование JSON в Python-словарь
+*Преобразование JSON в Python-словарь*
+
 parsed_data = json.loads(json_string)
+
 print(parsed_data["name"])  # Выведет: Андрей
+
 
 ```
 
