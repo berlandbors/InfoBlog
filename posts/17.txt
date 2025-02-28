@@ -1,6 +1,5 @@
 Что такое JSON?
 
-
 JSON (JavaScript Object Notation) — это легковесный формат обмена данными, основанный на синтаксисе JavaScript. Он широко используется для хранения и передачи данных между веб-сервисами и приложениями.
 
 **Основные характеристики JSON:**
@@ -16,6 +15,55 @@ JSON (JavaScript Object Notation) — это легковесный формат
 
 4. Язык-независимость – Хотя JSON основан на синтаксисе JavaScript, он поддерживается в большинстве языков программирования (Python, Java, C#, PHP и т. д.).
 
+
+```
+Пример JSON:
+
+{
+    "name": "Андрей",
+    "age": 39,
+    "married": true,
+    "children": ["Даник"],
+    "job": {
+        "position": "повар",
+        "experience": 10
+    }
+}
+```
+*В этом примере:*
+
+"name" – строка
+
+"age" – число
+
+"married" – булево значение (true/false)
+
+"children" – массив (список)
+
+"job" – вложенный объект
+
+
+**Использование JSON в Python**
+
+В Python можно работать с JSON с помощью встроенного модуля json:
+
+```
+import json
+
+# Преобразование Python-словаря в JSON
+data = {
+    "name": "Андрей",
+    "age": 39,
+    "married": True
+}
+json_string = json.dumps(data, indent=4)
+print(json_string)
+
+# Преобразование JSON в Python-словарь
+parsed_data = json.loads(json_string)
+print(parsed_data["name"])  # Выведет: Андрей
+
+```
 
 **Где используется JSON?**
 
