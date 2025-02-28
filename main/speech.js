@@ -56,7 +56,7 @@ function filterVoicesByLanguage() {
 
 // Функция для очистки текста от смайликов, знаков препинания и ссылок
 
-function cleanText(text, filterChars = ['*','**', '***']) {
+function cleanText(text, filterChars = ['*','**', '***','_', '__', '___', '#', '##', '###', '+', '~']) {
     // Регулярное выражение для удаления ссылок (http, https, www)
     text = text.replace(/https?:\/\/\S+|www\.\S+/gi, ''); 
 
