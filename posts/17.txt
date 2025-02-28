@@ -19,7 +19,9 @@ JSON (JavaScript Object Notation) — это легковесный формат
 ```
 Пример JSON:
 
+
 {
+
    
     "name": "Андрей",
 
@@ -36,7 +38,9 @@ JSON (JavaScript Object Notation) — это легковесный формат
 
     }
 
+
 }
+
 
 ```
 *В этом примере:*
