@@ -112,12 +112,14 @@ function linkify(text) {
         // === Обычные ссылки ===
         return `<a href="${hyperlink}" target="_blank" rel="noopener noreferrer">${url}</a>`;
     })
+
     // === Обработка Markdown-разметки ===
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')
     .replace(/^# (.+)$/gm, '<h1>$1</h1>')
     .replace(/^---$/gm, '<hr>')
     .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+
     // Нумерованные списки
     // Заменяем нумерацию на маркеры
 .replace(/(^\s*\d+\.\s+.+(?:\n|$))/gm, (match) => {
@@ -133,15 +135,15 @@ function linkify(text) {
     })
     // **Жирный** текст
   .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-  .replace(/__(.+?)__/g, '<strong>$1</strong>')
+  /*.replace(/__(.+?)__/g, '<strong>$1</strong>')*/
 
   // *Курсив*
   .replace(/(^|[^*])\*(?!\s)(.+?)(?!\s)\*(?!\*)/g, '$1<em>$2</em>')
-  .replace(/(^|[^_])_(?!\s)(.+?)(?!\s)_(?!_)/g, '$1<em>$2</em>')
+  /*.replace(/(^|[^_])_(?!\s)(.+?)(?!\s)_(?!_)/g, '$1<em>$2</em>')*/
 
   // ***Жирный курсив***
   .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
-  .replace(/___(.+?)___/g, '<strong><em>$1</em></strong>')
+  /*.replace(/___(.+?)___/g, '<strong><em>$1</em></strong>')*/
 
   // _Подчеркнутый текст_
   .replace(/\+\+(.+?)\+\+/g, '<u>$1</u>')
