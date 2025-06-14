@@ -2,17 +2,19 @@ body {
     font-family: Georgia, sans-serif;
     margin: 20px;
     max-width: 800px;
+    background: var(--bg-main);
+    color: var(--color-main);
 }
 
 /* Оглавление (меню содержания) */
 #toc-container {
     width: 100%;
-    max-width: 300px; /* Ограничиваем ширину */
-    max-height: 300px; /* Ограничиваем высоту */
-    overflow-y: auto; /* Добавляем вертикальную прокрутку */
-    border: 1px solid #ccc;
+    max-width: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
     padding: 10px;
-    background-color: #f9f9f9;
+    background-color: var(--bg-toc);
 }
 
 #toc-container h2 {
@@ -27,22 +29,23 @@ body {
 
 #toc li {
     padding: 5px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--color-border-light);
 }
 
 #toc a {
     text-decoration: none;
-    color: #007bff;
+    color: var(--color-link);
     cursor: pointer;
 }
 
 #toc a:hover {
     text-decoration: underline;
+    color: var(--color-link-hover);
 }
 
 /* Стили для статей */
 .post {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--color-border-light);
     padding: 10px 0;
 }
 
@@ -57,14 +60,15 @@ body {
     font-size: 16px;
     cursor: pointer;
     border: none;
-    background-color: #007bff;
-    color: white;
+    background-color: var(--bg-btn);
+    color: #fff;
     margin: 5px;
     border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
 .pagination button:disabled {
-    background-color: #ccc;
+    background-color: var(--color-border);
     cursor: not-allowed;
 }
 
@@ -75,22 +79,24 @@ body {
     margin: 20px 0;
     position: relative;
     width: 100%;
-    max-width: 400px; /* Ограничиваем ширину */
+    max-width: 400px;
 }
 
 .search-container input {
     width: 100%;
-    padding: 12px 40px 12px 15px; /* Пространство слева и справа */
+    padding: 12px 40px 12px 15px;
     font-size: 16px;
-    border: 2px solid #ccc;
+    border: 2px solid var(--color-border);
     border-radius: 25px;
     outline: none;
     transition: 0.3s;
+    background: var(--bg-main);
+    color: var(--color-main);
 }
 
 .search-container input:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    border-color: var(--color-link);
+    box-shadow: 0 0 8px rgba(138, 180, 248, 0.5);
 }
 
 /* Иконка 🔍 */
@@ -101,121 +107,119 @@ body {
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: #aaa;
-    pointer-events: none; /* Не кликабельна */
+    color: var(--color-border);
+    pointer-events: none;
 }
 
+/* Заголовки */
+h1, h2, h3 {
+    color: var(--color-main);
+    margin-top: 20px;
+}
 
+h1 {
+    font-size: 2rem;
+    border-bottom: 3px solid var(--color-link);
+    padding-bottom: 5px;
+}
 
-    /* Заголовки */
-    h1, h2, h3 {
-        color: #222;
-        margin-top: 20px;
-    }
+h2 {
+    font-size: 1.5rem;
+    border-left: 4px solid var(--color-link);
+    padding-left: 8px;
+}
 
-    h1 {
-        font-size: 2rem;
-        border-bottom: 3px solid #007BFF;
-        padding-bottom: 5px;
-    }
+h3 {
+    font-size: 1.25rem;
+    color: var(--color-sub);
+}
 
-    h2 {
-        font-size: 1.5rem;
-        border-left: 4px solid #007BFF;
-        padding-left: 8px;
-    }
+/* Текстовые элементы */
+p {
+    margin-bottom: 16px;
+}
 
-    h3 {
-        font-size: 1.25rem;
-        color: #555;
-    }
+a {
+    color: var(--color-link);
+    text-decoration: none;
+}
 
-    /* Текстовые элементы */
-    p {
-        margin-bottom: 16px;
-    }
+a:hover {
+    text-decoration: underline;
+    color: var(--color-link-hover);
+}
 
-    a {
-        color: #007BFF;
-        text-decoration: none;
-    }
+/* Списки */
+ul, ol {
+    padding-left: 20px;
+    margin-bottom: 16px;
+}
 
-    a:hover {
-        text-decoration: underline;
-    }
+/* Цитаты */
+blockquote {
+    border-left: 4px solid var(--color-border);
+    padding-left: 15px;
+    color: var(--color-muted);
+    font-style: italic;
+    background: var(--bg-block);
+    margin: 16px 0;
+}
 
-    /* Списки */
-    ul, ol {
-        padding-left: 20px;
-        margin-bottom: 16px;
-    }
+/* Кодовые блоки */
+pre, code {
+    background: var(--bg-block);
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+}
 
-    /* Цитаты */
-    blockquote {
-        border-left: 4px solid #ccc;
-        padding-left: 15px;
-        color: #666;
-        font-style: italic;
-        background: #f4f4f4;
-        margin: 16px 0;
-    }
+pre {
+    margin-bottom: 16px;
+}
 
-    /* Кодовые блоки */
-    pre, code {
-        background: #f4f4f4;
-        padding: 10px;
-        border-radius: 4px;
-        overflow-x: auto;
-        font-family: 'Courier New', monospace;
-    }
+/* Медиа-контент */
+img, video, iframe {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 16px auto;
+}
 
-    pre {
-        margin-bottom: 16px;
-    }
+audio {
+    width: 100%;
+    margin: 16px 0;
+}
 
-    /* Медиа-контент */
-    img, video, iframe {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 16px auto;
-    }
+/* Горизонтальная линия */
+hr {
+    border: none;
+    border-top: 2px solid var(--color-hr);
+    margin: 24px 0;
+}
 
-    audio {
-        width: 100%;
-        margin: 16px 0;
-    }
+/* Кнопки */
+button {
+    background-color: var(--bg-btn);
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-    /* Горизонтальная линия */
-    hr {
-        border: none;
-        border-top: 2px solid #eee;
-        margin: 24px 0;
-    }
+button:hover {
+    background-color: var(--bg-btn-hover);
+}
 
-    /* Кнопки */
-    button {
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
+/* Плавный скролл */
+html {
+    scroll-behavior: smooth;
+}
 
-    button:hover {
-        background-color: #0056b3;
-    }
-
-    /* Плавный скролл */
-    html {
-        scroll-behavior: smooth;
-    }
-
-    /* Стили модального окна */
-    
-    .modal {
+/* Стили модального окна */
+.modal {
     display: none;
     position: fixed;
     z-index: 999;
@@ -227,7 +231,8 @@ body {
     background-color: rgba(0,0,0,0.5);
 }
 .modal-content {
-    background-color: #fff;
+    background-color: var(--bg-modal);
+    color: var(--color-modal);
     margin: 10% auto;
     padding: 20px;
     border-radius: 8px;
@@ -238,14 +243,15 @@ body {
     float: right;
     font-size: 24px;
     cursor: pointer;
+    color: var(--color-close);
 }
 input[type=range] {
     width: 100%;
 }
 
 .spinner {
-    border: 8px solid #f3f3f3;
-    border-top: 8px solid #3498db;
+    border: 8px solid var(--bg-spinner);
+    border-top: 8px solid var(--bg-spinner-top);
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -257,4 +263,3 @@ input[type=range] {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
