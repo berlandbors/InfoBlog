@@ -1,10 +1,19 @@
 function linkify(text) {
-    const urlRegex = /((https?:\/\/|www\.)[^\s]+)/g;
-
+    // Регулярка захватывает URL, но не включает "хвостовые" символы: ) ] } > . , ; : ! ? " ' <
+    const urlRegex = /((https?:\/\/|www\.)[^\s\)\]\}\>\.,;:!?"'<]+)/g;
+    
     return text.replace(urlRegex, (url) => {
-        const hyperlink = url.startsWith('http') ? url : `https://${url}`;
-        // Создаем кликабельную ссылку
-        return `<a href="${hyperlink}" target="_blank" rel="noopener noreferrer">${hyperlink}</a>`;
+        // Проверяем, не осталось ли всё же "хвостовых" символов на конце (например, скобка внутри ссылки)
+        let cleanUrl = url;
+        let tail = '';
+        // Если вдруг ссылка заканчивается на разрешённый "хвост", убираем его из ссылки и добавим после <a>
+        const match = url.match(/^(.+?)([)\]\}\>\.,;:!?"'<]+)?$/);
+        if (match) {
+            cleanUrl = match[1];
+            tail = match[2] || '';
+        }
+        const hyperlink = cleanUrl.startsWith('http') ? cleanUrl : `https://${cleanUrl}`;
+        return `<a href="${hyperlink}" target="_blank" rel="noopener noreferrer">${hyperlink}</a>${tail}`;
     })
     // Обработка Markdown-разметки
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
