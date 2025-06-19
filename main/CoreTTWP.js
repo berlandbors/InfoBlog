@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <button class="share-link" data-title="${post.title}" data-content="${shortContent}" data-url="${articleURL}">📤 Поделиться</button><hr>
                     <!--button class="speak-text" data-text="${post.content}">🔊 Озвучить</button-->
                 </p>
-                <hr>
+                
             `;
             blogContainer.appendChild(article);
             // Генерация метатегов для соцсетей
