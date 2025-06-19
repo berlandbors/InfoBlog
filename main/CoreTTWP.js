@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <p>
                     <button class="copy-link" data-link="${articleURL}">🔗 Скопировать ссылку</button>
                     <button class="share-link" data-title="${post.title}" data-content="${shortContent}" data-url="${articleURL}">📤 Поделиться</button><hr>
-                    <button class="speak-text" data-text="${post.content}">🔊 Озвучить</button>
+                    <!--button class="speak-text" data-text="${post.content}">🔊 Озвучить</button-->
                 </p>
                 <hr>
             `;
